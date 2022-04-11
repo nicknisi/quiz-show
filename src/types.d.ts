@@ -22,7 +22,7 @@ export interface Category {
 
 export interface Round {
   name: string;
-  format: "standard" | "final";
+  format: 'standard' | 'final';
   categories: Category[];
 }
 
@@ -44,6 +44,6 @@ export interface State {
     question?: Question;
   };
   rounds: Round[];
-  view: "game" | "contestants";
+  view: 'game' | 'contestants';
   winner?: Contestant;
 }

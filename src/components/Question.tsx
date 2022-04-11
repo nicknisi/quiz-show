@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Question as QuestionData } from "../types";
+import { useState } from 'react';
+import { Question as QuestionData } from '../types';
 
 export interface QuestionProps {
   question: QuestionData;
@@ -18,10 +18,7 @@ export function Question({
 }: QuestionProps) {
   const [showAnswer, setShowAnswer] = useState(false);
   return (
-    <div
-      className={`question ${final ? "finalQuestion" : ""}`}
-      onClick={() => onClick?.()}
-    >
+    <div className={`question ${final ? 'finalQuestion' : ''}`} onClick={() => onClick?.()}>
       <div className="questionInfo">
         <div className="category">{category}</div>
         <div className="value">{value}</div>
