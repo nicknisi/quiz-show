@@ -10,6 +10,5 @@ export interface GameProviderProps {
 export const GameContext = createContext<null | { service: InterpreterFrom<typeof gameMachine> }>(null);
 export function GameProvider({ children }: GameProviderProps) {
   const service = useInterpret(gameMachine, { devTools: true });
-  service.start();
   return <GameContext.Provider value={{ service }}>{children}</GameContext.Provider>;
 }

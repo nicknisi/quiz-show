@@ -1,32 +1,39 @@
-import { Category as CategoryType, Question as QuestionType, Round as RoundType } from '../types';
+import { useMemo } from 'react';
+import { useQuestion } from '../hooks/game';
+import { Round as RoundType } from '../types';
 import { Category } from './Category';
 import { Question } from './Question';
 import classes from './Round.module.css';
 
 export interface BaseRoundProps {
   round: RoundType;
-  currentQuestion?: { question: QuestionType; category: CategoryType };
 }
 
-export function RegularRound({ round, currentQuestion }: BaseRoundProps) {
-  const question = currentQuestion?.question;
-  const category = currentQuestion?.category;
+export function RegularRound({ round }: BaseRoundProps) {
+  const { selectQuestion, toggleAnswer, currentQuestion, showAnswer, closeQuestion } = useQuestion();
+  const question = useMemo(() => currentQuestion?.question, [currentQuestion]);
+  const category = useMemo(() => currentQuestion?.category, [currentQuestion]);
   const { categories } = round;
   return (
     <div key="grid" className={`${classes.root} ${categories.length === 4 ? classes.fourColumns : ''}`}>
       {categories.map((category) => (
-        <Category category={category} key={category.name} onClick={() => {}} />
+        <Category category={category} key={category.name} onClick={(question) => selectQuestion(question, category)} />
       ))}
 
       {question && category ? (
         <Question
           question={question}
           category={category}
+          showAnswer={showAnswer}
           onClick={() => {
-            // set current question
+            // clear current question
+            console.log('%cClearing question', 'font-weight:bold;color:green', question);
+            closeQuestion();
           }}
           onShowAnswer={() => {
             // show answer
+            toggleAnswer();
+            console.log('%cToggling answer', 'font-weight:bold;color:green');
           }}
         />
       ) : (
@@ -36,7 +43,8 @@ export function RegularRound({ round, currentQuestion }: BaseRoundProps) {
   );
 }
 
-export function FinalRound({ round, currentQuestion: current }: BaseRoundProps) {
+export function FinalRound({ round }: BaseRoundProps) {
+  const { currentQuestion: current } = useQuestion();
   const [
     {
       name: category,

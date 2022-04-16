@@ -19,7 +19,7 @@ export function Question({
   final,
 }: QuestionProps) {
   return (
-    <div className={`${classes.question} ${final ? classes.finalQuestion : ''}`} onClick={() => onClick?.()}>
+    <div className={`${classes.root} ${final ? classes.finalQuestion : ''}`} onClick={() => onClick?.()}>
       <div className={classes.questionInfo}>
         <div className={classes.category}>{category.name}</div>
         <div className={classes.value}>{value}</div>
@@ -29,6 +29,7 @@ export function Question({
           <img className={classes.image} src={image} alt={clue} />
         </div>
       )}
+      <div className={classes.clue}>{clue}</div>
       {showAnswer ? (
         <div className={classes.answer}>{answer}</div>
       ) : (

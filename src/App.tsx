@@ -6,8 +6,7 @@ import { useGameData, useGameStatus, useGameView } from './hooks/game';
 
 function App() {
   const loaded = useGameStatus();
-  const { currentRound, style: gameStyle, name: gameName, currentQuestion, contestants, round } = useGameData();
-  const numRounds = 3;
+  const { currentRound, style: gameStyle, name: gameName, contestants, round, numRounds } = useGameData();
   let winner = undefined;
   const view = useGameView();
 
@@ -35,13 +34,13 @@ function App() {
               <h1>Winner</h1>
               <Contestant {...winner} />
             </div>
-          ) : view === 'idle' ? (
+          ) : view === 'contestants' ? (
+            <Contestants key="contestants-view" horizontal contestants={contestants} />
+          ) : (
             <div key="game-view" className={classes.gameWrapper}>
-              <Round final={round.format !== 'standard'} round={round} currentQuestion={currentQuestion} />
+              <Round final={round.format !== 'standard'} round={round} />
               <Contestants contestants={contestants} />
             </div>
-          ) : (
-            <Contestants key="contestants-view" horizontal contestants={contestants} />
           )}
         </div>
       ) : (

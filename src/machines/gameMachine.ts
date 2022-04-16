@@ -25,7 +25,7 @@ export type GameMachineEvent =
         category: Category;
       };
     }
-  | { type: 'TOGGLE_ANSWER' | 'TOGGLE_CONTESTANTS' }
+  | { type: 'TOGGLE_ANSWER' | 'TOGGLE_CONTESTANTS' | 'CLOSE_QUESTION' }
   | { type: 'SET_ROUND'; data: { round: number } }
   | { type: 'SET_WINNER'; data: { winner: Contestant } }
   | { type: 'INCREMENT_SCORE' | 'DECREMENT_SCORE'; contestant: Contestant }
@@ -96,6 +96,7 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
                 actions: assign({
                   currentQuestion: (_context, event) => {
                     const { question, category } = event.data;
+                    console.log('%cSETTING QUESTION', 'font-weight:bold;color:green');
                     return { question, category };
                   },
                 }),
@@ -104,6 +105,14 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
           },
           question: {
             initial: 'default',
+            on: {
+              CLOSE_QUESTION: {
+                target: 'idle',
+                actions: assign({
+                  currentQuestion: (_context) => undefined,
+                }),
+              },
+            },
             states: {
               default: {
                 on: {

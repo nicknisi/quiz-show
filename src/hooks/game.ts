@@ -1,8 +1,8 @@
 import { useActor, useSelector } from '@xstate/react';
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { StateValueMap } from 'xstate';
 import { GameContext } from '../GameProvider';
-import { GameView } from '../types';
+import { Category, GameView, Question } from '../types';
 
 export const useGameService = () => {
   const context = useContext(GameContext);
@@ -37,6 +37,7 @@ export const useGameData = () => {
     (state) => state.context,
   );
   const round = useMemo(() => rounds?.[currentRound], [rounds, currentRound]);
+  const numRounds = useMemo(() => rounds?.length, [rounds]);
   return {
     contestants,
     currentContestant,
@@ -47,10 +48,30 @@ export const useGameData = () => {
     style,
     winner,
     round,
+    numRounds,
   };
 };
 
 export const useGameView = () => {
   const service = useGameService();
   return useSelector(service, (state) => (state.value as StateValueMap)?.game as GameView);
+};
+
+export const useQuestion = () => {
+  const service = useGameService();
+  const currentQuestion = useSelector(service, (state) => state.context.currentQuestion);
+  const selectQuestion = useCallback(
+    (question: Question, category: Category) => service.send({ type: 'SELECT_QUESTION', data: { question, category } }),
+    [service],
+  );
+  const toggleAnswer = useCallback(() => service.send({ type: 'TOGGLE_ANSWER' }), [service]);
+  const showAnswer = useSelector(service, (state) => state.matches('game.question.showAnswer'));
+  const closeQuestion = useCallback(() => service.send({ type: 'CLOSE_QUESTION' }), [service]);
+  return {
+    showAnswer,
+    selectQuestion,
+    toggleAnswer,
+    currentQuestion,
+    closeQuestion,
+  };
 };
