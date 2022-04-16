@@ -21,6 +21,7 @@
     "@storybook/addon-essentials": "^6.4.21",
     "@storybook/addon-interactions": "^6.4.21",
     "@storybook/addon-links": "^6.4.21",
+    "@storybook/builder-vite": "^0.1.29",
     "@storybook/react": "^6.4.21",
     "@storybook/testing-library": "^0.0.9",
     "@types/react": "^17.0.33",
