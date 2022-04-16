@@ -11,7 +11,7 @@ export const Category = ({ onClick, category: { name, questions } }: CategoryPro
     <div className={classes.root}>
       <div className={`${classes.box} ${classes.title}`}>{name}</div>
       {questions.map((question) => (
-        <div className={classes.box} onClick={() => onClick(question)}>
+        <div key={question.answer} className={classes.box} onClick={() => onClick(question)}>
           {!question.used && <div className={classes.value}>{question.value}</div>}
         </div>
       ))}

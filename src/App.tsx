@@ -48,7 +48,7 @@ function App() {
             </div>
           ) : view === 'game' ? (
             <div key="game-view" className={classes.gameWrapper}>
-              <Round final={round.format === 'standard'} round={round} currentQuestion={currentQuestion} />
+              <Round final={round.format !== 'standard'} round={round} currentQuestion={currentQuestion} />
               <Contestants contestants={contestants} />
             </div>
           ) : (
