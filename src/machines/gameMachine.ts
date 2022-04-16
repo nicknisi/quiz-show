@@ -76,8 +76,13 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
       },
       game: {
         initial: 'idle',
-        entry: () => console.trace(),
         on: {
+          SET_ROUND: {
+            target: '.idle',
+            actions: assign({
+              currentRound: (_context, event) => event.data.round,
+            }),
+          },
           SET_WINNER: {
             target: 'winner',
             actions: assign({
@@ -96,7 +101,6 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
                 actions: assign({
                   currentQuestion: (_context, event) => {
                     const { question, category } = event.data;
-                    console.log('%cSETTING QUESTION', 'font-weight:bold;color:green');
                     return { question, category };
                   },
                 }),

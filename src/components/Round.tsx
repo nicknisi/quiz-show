@@ -26,14 +26,10 @@ export function RegularRound({ round }: BaseRoundProps) {
           category={category}
           showAnswer={showAnswer}
           onClick={() => {
-            // clear current question
-            console.log('%cClearing question', 'font-weight:bold;color:green', question);
             closeQuestion();
           }}
           onShowAnswer={() => {
-            // show answer
             toggleAnswer();
-            console.log('%cToggling answer', 'font-weight:bold;color:green');
           }}
         />
       ) : (
@@ -44,13 +40,13 @@ export function RegularRound({ round }: BaseRoundProps) {
 }
 
 export function FinalRound({ round }: BaseRoundProps) {
-  const { currentQuestion: current } = useQuestion();
+  const { selectQuestion, toggleAnswer, currentQuestion: current, showAnswer, closeQuestion } = useQuestion();
   const [
     {
-      name: category,
       questions: [question],
     },
   ] = round.categories;
+  const [category] = round.categories;
   const currentQuestion = current?.question;
   const currentCategory = current?.category;
   return (
@@ -58,20 +54,25 @@ export function FinalRound({ round }: BaseRoundProps) {
       {currentQuestion && currentCategory ? (
         <Question
           final
-          question={question}
+          question={currentQuestion}
           category={currentCategory}
+          showAnswer={showAnswer}
           onClick={() => {
-            // clear current qustion
+            closeQuestion();
+          }}
+          onShowAnswer={() => {
+            toggleAnswer();
           }}
         />
       ) : (
         <div
           className={classes.category}
           onClick={() => {
+            selectQuestion(question, category);
             // set current question
           }}
         >
-          Final round category: {category}
+          Final round category: {category.name}
         </div>
       )}
     </div>

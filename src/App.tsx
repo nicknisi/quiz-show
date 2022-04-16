@@ -6,7 +6,7 @@ import { useGameData, useGameStatus, useGameView } from './hooks/game';
 
 function App() {
   const loaded = useGameStatus();
-  const { currentRound, style: gameStyle, name: gameName, contestants, round, numRounds } = useGameData();
+  const { currentRound, style: gameStyle, name: gameName, contestants, round, numRounds, nextRound } = useGameData();
   let winner = undefined;
   const view = useGameView();
 
@@ -21,7 +21,7 @@ function App() {
                 className={classes.round}
                 disabled={currentRound >= numRounds - 1}
                 onClick={() => {
-                  // set current round
+                  nextRound();
                 }}
               >
                 <div className={classes.roundNumber}>Round {String(currentRound + 1)}</div>

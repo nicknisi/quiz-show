@@ -31,13 +31,22 @@ export const useGameStatus = () => {
 };
 
 export const useGameData = () => {
-  const service = useGameService();
-  const { contestants, currentContestant, currentQuestion, currentRound, name, rounds, style, winner } = useSelector(
-    service,
-    (state) => state.context,
-  );
+  const [state, send] = useGameActor();
+  const { contestants, currentContestant, currentQuestion, currentRound, name, rounds, style, winner } = state.context;
   const round = useMemo(() => rounds?.[currentRound], [rounds, currentRound]);
   const numRounds = useMemo(() => rounds?.length, [rounds]);
+  const nextRound = useCallback(
+    (round?: number) => {
+      if (round === undefined) {
+        round = currentRound + 1;
+      }
+      if (round > numRounds - 1) {
+        round = 0;
+      }
+      send({ type: 'SET_ROUND', data: { round } });
+    },
+    [numRounds, currentRound],
+  );
   return {
     contestants,
     currentContestant,
@@ -49,6 +58,7 @@ export const useGameData = () => {
     winner,
     round,
     numRounds,
+    nextRound,
   };
 };
 
