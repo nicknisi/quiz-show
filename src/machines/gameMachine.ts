@@ -49,7 +49,7 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
         states: {
           initial: {
             entry: assign({
-              url: () => '/tricks.json',
+              url: () => '/assets/tricks.json',
             }),
             always: 'loadGame',
           },
