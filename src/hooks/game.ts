@@ -1,6 +1,8 @@
 import { useActor, useSelector } from '@xstate/react';
 import { useContext, useMemo } from 'react';
+import { StateValueMap } from 'xstate';
 import { GameContext } from '../GameProvider';
+import { GameView } from '../types';
 
 export const useGameService = () => {
   const context = useContext(GameContext);
@@ -29,8 +31,11 @@ export const useGameStatus = () => {
 };
 
 export const useGameData = () => {
-  const [state] = useGameActor();
-  const { contestants, currentContestant, currentQuestion, currentRound, name, rounds, style, winner } = state.context;
+  const service = useGameService();
+  const { contestants, currentContestant, currentQuestion, currentRound, name, rounds, style, winner } = useSelector(
+    service,
+    (state) => state.context,
+  );
   const round = useMemo(() => rounds?.[currentRound], [rounds, currentRound]);
   return {
     contestants,
@@ -43,4 +48,9 @@ export const useGameData = () => {
     winner,
     round,
   };
+};
+
+export const useGameView = () => {
+  const service = useGameService();
+  return useSelector(service, (state) => (state.value as StateValueMap)?.game as GameView);
 };

@@ -1,26 +1,15 @@
-import { Contestant } from './components/Contestant';
-import { Round } from './components/Round';
-import { useGameData, useGameStatus } from './hooks/game';
-import { Contestant as ContestantType } from './types';
 import classes from './App.module.css';
-
-function Contestants({ contestants, horizontal }: { horizontal?: boolean; contestants: ContestantType[] }) {
-  return (
-    <div className={`contestants ${horizontal ? 'horizontal' : ''}`}>
-      {contestants.map((contestant) => (
-        <Contestant key={contestant.name} large={horizontal} {...contestant} />
-      ))}
-    </div>
-  );
-}
+import { Contestant } from './components/Contestant';
+import { Contestants } from './components/Contestants';
+import { Round } from './components/Round';
+import { useGameData, useGameStatus, useGameView } from './hooks/game';
 
 function App() {
   const loaded = useGameStatus();
   const { currentRound, style: gameStyle, name: gameName, currentQuestion, contestants, round } = useGameData();
   const numRounds = 3;
   let winner = undefined;
-  const view = 'game';
-  console.log('ROUND', round);
+  const view = useGameView();
 
   return (
     <>
@@ -46,7 +35,7 @@ function App() {
               <h1>Winner</h1>
               <Contestant {...winner} />
             </div>
-          ) : view === 'game' ? (
+          ) : view === 'idle' ? (
             <div key="game-view" className={classes.gameWrapper}>
               <Round final={round.format !== 'standard'} round={round} currentQuestion={currentQuestion} />
               <Contestants contestants={contestants} />

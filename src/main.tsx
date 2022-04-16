@@ -1,16 +1,21 @@
+import { inspect } from '@xstate/inspect';
 import { StrictMode, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { GameProvider } from './GameProvider';
 import './index.css';
 
+inspect({
+  iframe: () => document.querySelector<HTMLIFrameElement>('[data-xstate]'),
+});
+
 ReactDOM.render(
   <StrictMode>
-    <GameProvider>
-      <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
+      <GameProvider>
         <App />
-      </Suspense>
-    </GameProvider>
+      </GameProvider>
+    </Suspense>
   </StrictMode>,
   document.getElementById('root'),
 );

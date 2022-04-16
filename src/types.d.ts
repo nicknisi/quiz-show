@@ -1,5 +1,7 @@
 export type GameStyle = 'jsDanger' | 'goPanic';
 
+export type GameView = 'idle' | 'game' | 'contestants';
+
 export interface Contestant {
   name: string;
   handle: string;

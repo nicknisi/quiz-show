@@ -66,11 +66,9 @@ export function useSuspensefulActor<
     read(): never | [TState, TActor['send']] {
       switch (ref.current.status) {
         case 'resolved':
-          console.log('%cRESOLVED', 'font-weight:bold;color:green');
           return ref.current.result;
         case 'loading':
         default:
-          console.log('%cLOADING', 'font-weight:bold;color:red');
           throw ref.current.promise;
       }
     },

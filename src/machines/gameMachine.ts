@@ -25,12 +25,10 @@ export type GameMachineEvent =
         category: Category;
       };
     }
-  | { type: 'TOGGLE_ANSWER' }
+  | { type: 'TOGGLE_ANSWER' | 'TOGGLE_CONTESTANTS' }
   | { type: 'SET_ROUND'; data: { round: number } }
-  | { type: 'TOGGLE_CONTESTANTS' }
   | { type: 'SET_WINNER'; data: { winner: Contestant } }
-  | { type: 'INCREMENT_SCORE'; contestant: Contestant }
-  | { type: 'DECREMENT_SCORE'; contestant: Contestant }
+  | { type: 'INCREMENT_SCORE' | 'DECREMENT_SCORE'; contestant: Contestant }
   | { type: 'SET_CURRENT_CONTESTANT'; data: { contestant: Contestant } };
 
 export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
@@ -78,6 +76,7 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
       },
       game: {
         initial: 'idle',
+        entry: () => console.trace(),
         on: {
           SET_WINNER: {
             target: 'winner',
