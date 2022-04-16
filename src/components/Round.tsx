@@ -1,6 +1,7 @@
 import { Category as CategoryType, Question as QuestionType, Round as RoundType } from '../types';
 import { Category } from './Category';
 import { Question } from './Question';
+import classes from './Round.module.css';
 
 export interface BaseRoundProps {
   round: RoundType;
@@ -12,7 +13,7 @@ export function RegularRound({ round, currentQuestion }: BaseRoundProps) {
   const category = currentQuestion?.category;
   const { categories } = round;
   return (
-    <div key="grid" className={`root ${categories.length === 4 ? 'fourColumns' : ''}`}>
+    <div key="grid" className={`${classes.root} ${categories.length === 4 ? classes.fourColumns : ''}`}>
       {categories.map((category) => (
         <Category category={category} key={category.name} onClick={() => {}} />
       ))}
@@ -45,7 +46,7 @@ export function FinalRound({ round, currentQuestion: current }: BaseRoundProps) 
   const currentQuestion = current?.question;
   const currentCategory = current?.category;
   return (
-    <div className="final">
+    <div className={classes.final}>
       {currentQuestion && currentCategory ? (
         <Question
           final
@@ -57,7 +58,7 @@ export function FinalRound({ round, currentQuestion: current }: BaseRoundProps) 
         />
       ) : (
         <div
-          className="category"
+          className={classes.category}
           onClick={() => {
             // set current question
           }}

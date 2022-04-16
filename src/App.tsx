@@ -1,8 +1,8 @@
-import './App.css';
 import { Contestant } from './components/Contestant';
 import { Round } from './components/Round';
 import { useGameData, useGameStatus } from './hooks/game';
 import { Contestant as ContestantType } from './types';
+import classes from './App.module.css';
 
 function Contestants({ contestants, horizontal }: { horizontal?: boolean; contestants: ContestantType[] }) {
   return (
@@ -25,29 +25,29 @@ function App() {
   return (
     <>
       {loaded ? (
-        <div className={`root ${gameStyle}`}>
-          <div className="header">
-            <h1 className={`title ${gameStyle}`}>{gameName}</h1>
+        <div className={`${classes.root} ${classes.gameStyle}`}>
+          <div className={classes.header}>
+            <h1 className={`${classes.title} ${classes[gameStyle]}`}>{gameName}</h1>
             {!winner && (
               <button
-                className="round"
+                className={classes.round}
                 disabled={currentRound >= numRounds - 1}
                 onClick={() => {
                   // set current round
                 }}
               >
-                <div className="roundNumber">Round {String(currentRound + 1)}</div>
+                <div className={classes.roundNumber}>Round {String(currentRound + 1)}</div>
                 <div>{round?.name}</div>
               </button>
             )}
           </div>
           {winner ? (
-            <div key="winner-view" className="winner">
+            <div key="winner-view" className={classes.winner}>
               <h1>Winner</h1>
               <Contestant {...winner} />
             </div>
           ) : view === 'game' ? (
-            <div key="game-view" className="gameWrapper">
+            <div key="game-view" className={classes.gameWrapper}>
               <Round final={round.format === 'standard'} round={round} currentQuestion={currentQuestion} />
               <Contestants contestants={contestants} />
             </div>

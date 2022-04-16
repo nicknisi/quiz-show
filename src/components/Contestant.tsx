@@ -1,5 +1,5 @@
 import { Contestant as ContestantData } from '../types';
-import './contestant.module.css';
+import classes from './contestant.module.css';
 
 export interface ContestantProps extends ContestantData {
   onIncrement?: (value: number) => void;
@@ -9,19 +9,19 @@ export interface ContestantProps extends ContestantData {
 
 export function Contestant({ onDecrement, onIncrement, large, name, handle, avatar, score }: ContestantProps) {
   return (
-    <div className={`root ${large ? 'large' : ''}`}>
+    <div className={`${classes.root} ${large ? classes.large : ''}`}>
       <div className="actions">
-        <button className="actionButton" onClick={() => onIncrement?.(100)}>
+        <button className={classes.actionButton} onClick={() => onIncrement?.(100)}>
           +
         </button>
-        <button className="actionButton" onClick={() => onDecrement?.(100)}>
+        <button className={classes.actionButton} onClick={() => onDecrement?.(100)}>
           -
         </button>
       </div>
-      <img className="avatar" src={avatar ? avatar : `http://localhost:8888/?handle=${handle}`} />
-      <div className="info">
-        <div className="name">{name}</div>
-        <div className={`score, ${score >= 0 ? 'positive' : 'negative'}`}>{String(score)}</div>
+      <img className={classes.avatar} src={avatar ? avatar : `http://localhost:8888/?handle=${handle}`} />
+      <div className={classes.info}>
+        <div className={classes.name}>{name}</div>
+        <div className={`${classes.score}, ${score >= 0 ? classes.positive : classes.negative}`}>{String(score)}</div>
       </div>
     </div>
   );

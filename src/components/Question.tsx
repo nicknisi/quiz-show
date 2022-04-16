@@ -1,5 +1,5 @@
 import { Category, Question as QuestionData } from '../types';
-import './question.module.css';
+import classes from './question.module.css';
 
 export interface QuestionProps {
   question: QuestionData;
@@ -19,22 +19,22 @@ export function Question({
   final,
 }: QuestionProps) {
   return (
-    <div className={`question ${final ? 'finalQuestion' : ''}`} onClick={() => onClick?.()}>
-      <div className="questionInfo">
-        <div className="category">{category.name}</div>
-        <div className="value">{value}</div>
+    <div className={`${classes.question} ${final ? classes.finalQuestion : ''}`} onClick={() => onClick?.()}>
+      <div className={classes.questionInfo}>
+        <div className={classes.category}>{category.name}</div>
+        <div className={classes.value}>{value}</div>
       </div>
       {image && (
-        <div className="imageWrapper">
-          <img className="image" src={image} alt={clue} />
+        <div className={classes.imageWrapper}>
+          <img className={classes.image} src={image} alt={clue} />
         </div>
       )}
       {showAnswer ? (
-        <div className="answer">{answer}</div>
+        <div className={classes.answer}>{answer}</div>
       ) : (
         <>
           <div
-            className="showAnswer"
+            className={classes.showAnswer}
             onClick={(event) => {
               event.stopPropagation();
               onShowAnswer?.();

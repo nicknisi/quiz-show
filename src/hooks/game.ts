@@ -1,7 +1,6 @@
 import { useActor, useSelector } from '@xstate/react';
 import { useContext, useMemo } from 'react';
 import { GameContext } from '../GameProvider';
-import { useSuspensefulActor } from './useSuspensefulActor';
 
 export const useGameService = () => {
   const context = useContext(GameContext);
@@ -12,7 +11,6 @@ export const useGameService = () => {
 
   const { service } = context;
 
-  console.log('%cservice', 'font-weight:bold;color:green', service.state?.value);
   (window as any).service = service;
 
   return service;

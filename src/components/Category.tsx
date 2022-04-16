@@ -1,5 +1,5 @@
 import { Category as CategoryData, Question } from '../types';
-import './category.module.css';
+import classes from './category.module.css';
 
 export interface CategoryProps {
   category: CategoryData;
@@ -8,11 +8,11 @@ export interface CategoryProps {
 
 export const Category = ({ onClick, category: { name, questions } }: CategoryProps) => {
   return (
-    <div className="root">
-      <div className="box title">{name}</div>
+    <div className={classes.root}>
+      <div className={`${classes.box} ${classes.title}`}>{name}</div>
       {questions.map((question) => (
-        <div className="box" onClick={() => onClick(question)}>
-          {!question.used && <div className="value">{question.value}</div>}
+        <div className={classes.box} onClick={() => onClick(question)}>
+          {!question.used && <div className={classes.value}>{question.value}</div>}
         </div>
       ))}
     </div>
