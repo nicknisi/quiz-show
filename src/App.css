@@ -1,42 +1,105 @@
-.App {
-  text-align: center;
+@import './variables.css';
+
+@font-face {
+    font-family: 'jsdanger';
+    src: url('/assets/webfont.woff2') format('woff2'),
+        url('/assets/webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2vw 5vw;
+    position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.root.jsDanger:before {
+    background: url(/assets/jsparty-abstract-art.svg) no-repeat;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.root.goPanic:before {
+    background: url(/assets/gotime-abstract-art.svg) no-repeat;
 }
 
-.App-link {
-  color: #61dafb;
+.root:before {
+    content: ""; width: 80vw;
+    height: 80vw;
+    opacity: 0.2;
+    position: fixed;
+    right: -40vw;
+    top: -40vw;
+    z-index: -1;
+    pointer-events: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.header {
+    align-items: flex-end;
+    display: flex;
+    color: var(--white);
+    width: 100%;
+    margin-bottom: 2.5vw;
 }
 
-button {
-  font-size: calc(10px + 2vmin);
+.roundNumber {
+    font-size: calc(1em - 0.75vw);
+}
+
+.title.jsDanger {
+    background: url('/assets/jsdanger-logo_3x.png') center no-repeat;
+    background-size: 100%;
+    height: 100px;
+}
+
+.title.goPanic {
+    background: url('/assets/gopanic-logo_2x.png') center no-repeat;
+    background-size: 100%;
+    height: 130px;
+}
+
+.title {
+    background-size: 100%;
+    flex: 0 0 526px;
+    width: 526px;
+    margin: 0 20px 0 0;
+    text-indent: -9999px;
+}
+
+.round {
+    font-family: 'jsdanger', serif;
+    background: none;
+    border: none;
+    color: var(--yellow);
+    font-size: calc(1em + 1vw);
+    text-align: left;
+}
+
+.gameWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+
+}
+
+.winner {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-family: 'jsdanger', serif;
+    color: var(--yellow);
+    zoom: 300%;
+}
+
+.contestants {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.horizontal {
+	flex-direction: row;
 }

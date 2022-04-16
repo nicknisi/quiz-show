@@ -1,11 +1,16 @@
-import React from 'react';
+import { StrictMode, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import { GameProvider } from './GameProvider';
+import './index.css';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <StrictMode>
+    <GameProvider>
+      <Suspense fallback={<div>Loading...</div>}>
+        <App />
+      </Suspense>
+    </GameProvider>
+  </StrictMode>,
   document.getElementById('root'),
 );

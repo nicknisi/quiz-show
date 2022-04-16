@@ -1,18 +1,17 @@
-import { Category as CategoryData } from '../types';
+import { Category as CategoryData, Question } from '../types';
+import './category.module.css';
 
-export interface CategoryProps extends CategoryData {}
+export interface CategoryProps {
+  category: CategoryData;
+  onClick: (question: Question) => void;
+}
 
-export const Category = ({ name, questions }: CategoryProps) => {
+export const Category = ({ onClick, category: { name, questions } }: CategoryProps) => {
   return (
     <div className="root">
       <div className="box title">{name}</div>
       {questions.map((question) => (
-        <div
-          className="box"
-          onClick={() => {
-            // TODO: set current question
-          }}
-        >
+        <div className="box" onClick={() => onClick(question)}>
           {!question.used && <div className="value">{question.value}</div>}
         </div>
       ))}

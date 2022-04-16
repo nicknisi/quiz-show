@@ -4,7 +4,8 @@ import { Category, Contestant, Game, Question, Round } from '../types';
 export interface GameMachineContext {
   name: string;
   style: string;
-  currentRound?: Round | null;
+  currentRound: number;
+  currentContestant?: Contestant | null;
   contestants: Contestant[];
   pointsAtStake: number;
   currentQuestion?: {
@@ -27,7 +28,10 @@ export type GameMachineEvent =
   | { type: 'TOGGLE_ANSWER' }
   | { type: 'SET_ROUND'; data: { round: number } }
   | { type: 'TOGGLE_CONTESTANTS' }
-  | { type: 'SET_WINNER'; data: { winner: Contestant } };
+  | { type: 'SET_WINNER'; data: { winner: Contestant } }
+  | { type: 'INCREMENT_SCORE'; contestant: Contestant }
+  | { type: 'DECREMENT_SCORE'; contestant: Contestant }
+  | { type: 'SET_CURRENT_CONTESTANT'; data: { contestant: Contestant } };
 
 export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
   {
@@ -45,7 +49,7 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
         states: {
           initial: {
             entry: assign({
-              url: () => '/game.json',
+              url: () => '/tricks.json',
             }),
             always: 'loadGame',
           },
@@ -61,6 +65,7 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
                   rounds: (_context, event) => event.data.rounds,
                   name: (_context, event) => event.data.name,
                   style: (_context, event) => event.data.style,
+                  currentRound: () => 0,
                 }),
               },
             },
@@ -103,6 +108,11 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
             states: {
               default: {
                 on: {
+                  SET_CURRENT_CONTESTANT: {
+                    actions: assign({
+                      currentContestant: (_context, { data: { contestant } }) => contestant,
+                    }),
+                  },
                   TOGGLE_ANSWER: {
                     target: 'showAnswer',
                     actions: assign({
@@ -119,9 +129,35 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
                 },
               },
               showAnswer: {
+                entry: assign({
+                  currentQuestion: ({ currentQuestion }) => {
+                    currentQuestion!.question.used = true;
+                    return currentQuestion;
+                  },
+                }),
                 on: {
+                  INCREMENT_SCORE: {
+                    actions: assign({
+                      currentContestant: ({ currentContestant, currentQuestion }) => {
+                        currentContestant!.score += currentQuestion!.question.value;
+                        return currentContestant;
+                      },
+                    }),
+                  },
+                  DECREMENT_SCORE: {
+                    actions: assign({
+                      currentContestant: ({ currentContestant, currentQuestion }) => {
+                        currentContestant!.score -= currentQuestion!.question.value;
+                        return currentContestant;
+                      },
+                    }),
+                  },
                   TOGGLE_ANSWER: {
                     target: 'default',
+                    actions: assign({
+                      currentQuestion: (_context) => undefined,
+                      currentContestant: (_context) => undefined,
+                    }),
                   },
                 },
               },
