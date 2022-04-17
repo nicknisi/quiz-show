@@ -37,14 +37,10 @@ export const useGameData = () => {
   const round = useMemo(() => rounds?.[currentRound], [rounds, currentRound]);
   const numRounds = useMemo(() => rounds?.length, [rounds]);
   const nextRound = useCallback(
-    (round?: number) => {
-      if (round === undefined) {
-        round = currentRound + 1;
-      }
-      if (round > numRounds - 1) {
-        round = 0;
-      }
-      send({ type: 'SET_ROUND', data: { round } });
+    (round: 1 | -1 = 1) => {
+      const nextRound =
+        (currentRound + round) % numRounds === 0 ? 0 : currentRound + round < 0 ? numRounds - 1 : currentRound + round;
+      send({ type: 'SET_ROUND', data: { round: nextRound } });
     },
     [numRounds, currentRound],
   );
