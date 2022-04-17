@@ -5,6 +5,7 @@ import classes from './contestant.module.css';
 
 export interface ContestantProps extends ContestantData {
   large?: boolean;
+  hideControls?: boolean;
 }
 
 export const usePlayer = (player: ContestantData) => {
@@ -28,18 +29,20 @@ export const usePlayer = (player: ContestantData) => {
   };
 };
 
-export function Contestant({ large, name, handle, avatar, score }: ContestantProps) {
+export function Contestant({ large, name, handle, avatar, score, hideControls }: ContestantProps) {
   const { increment, decrement } = usePlayer({ handle, avatar, name, score });
   return (
     <div className={`${classes.root} ${large ? classes.large : ''}`}>
-      <div className="actions">
-        <button className={classes.actionButton} onClick={() => increment()}>
-          +
-        </button>
-        <button className={classes.actionButton} onClick={() => decrement()}>
-          -
-        </button>
-      </div>
+      {!hideControls && (
+        <div className="actions">
+          <button className={classes.actionButton} onClick={() => increment()}>
+            +
+          </button>
+          <button className={classes.actionButton} onClick={() => decrement()}>
+            -
+          </button>
+        </div>
+      )}
       <img className={classes.avatar} src={avatar ?? `http://localhost:8888/?handle=${handle}`} />
       <div className={classes.info}>
         <div className={classes.name}>{name}</div>

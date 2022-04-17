@@ -1,9 +1,9 @@
 import { assign, createMachine } from 'xstate';
-import { Category, Contestant, Game, Question, Round } from '../types';
+import { Category, Contestant, Game, GameStyle, Question, Round } from '../types';
 
 export interface GameMachineContext {
   name: string;
-  style: string;
+  style: GameStyle;
   currentRound: number;
   currentContestant?: Contestant | null;
   contestants: Contestant[];
@@ -27,7 +27,7 @@ export type GameMachineEvent =
     }
   | { type: 'TOGGLE_ANSWER' | 'TOGGLE_CONTESTANTS' | 'CLOSE_QUESTION' }
   | { type: 'SET_ROUND'; data: { round: number } }
-  | { type: 'SET_WINNER'; data: { winner: Contestant } }
+  | { type: 'SET_WINNER'; winner: Contestant | undefined }
   | { type: 'INCREMENT_SCORE' | 'DECREMENT_SCORE'; handle: string; value: number }
   | { type: 'SET_CURRENT_CONTESTANT'; data: { contestant: Contestant } };
 
@@ -110,7 +110,11 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
           SET_WINNER: {
             target: 'winner',
             actions: assign({
-              winner: (_context, event) => event.data.winner,
+              winner: (_context, event) => {
+                const { winner } = event;
+                console.log('WINNER', winner, event);
+                return winner;
+              },
             }),
           },
         },

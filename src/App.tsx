@@ -2,12 +2,24 @@ import classes from './App.module.css';
 import { Contestant } from './components/Contestant';
 import { Contestants } from './components/Contestants';
 import { Round } from './components/Round';
-import { useGameData, useGameStatus, useGameView } from './hooks/game';
+import { useAudioControls } from './hooks/audio';
+import { useGameControls, useGameData, useGameStatus, useGameView } from './hooks/game';
 
 function App() {
   const loaded = useGameStatus();
-  const { currentRound, style: gameStyle, name: gameName, contestants, round, numRounds, nextRound } = useGameData();
-  let winner = undefined;
+  const {
+    currentRound,
+    style: gameStyle,
+    name: gameName,
+    contestants,
+    round,
+    numRounds,
+    setRound,
+    style,
+    winner,
+  } = useGameData();
+  useGameControls();
+  useAudioControls(style);
   const view = useGameView();
 
   return (
@@ -21,7 +33,7 @@ function App() {
                 className={classes.round}
                 disabled={currentRound >= numRounds - 1}
                 onClick={() => {
-                  nextRound();
+                  setRound();
                 }}
               >
                 <div className={classes.roundNumber}>Round {String(currentRound + 1)}</div>
@@ -32,7 +44,7 @@ function App() {
           {winner ? (
             <div key="winner-view" className={classes.winner}>
               <h1>Winner</h1>
-              <Contestant {...winner} />
+              <Contestant hideControls {...winner} />
             </div>
           ) : view === 'contestants' ? (
             <Contestants key="contestants-view" horizontal contestants={contestants} />
