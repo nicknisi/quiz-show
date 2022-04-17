@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 import { useSendEvent, useValue } from '../hooks/game';
-import { Contestant as ContestantData } from '../types';
-import classes from './contestant.module.css';
+import { Player as PlayerData } from '../types';
+import classes from './Player.module.css';
 
-export interface ContestantProps extends ContestantData {
+export interface PlayerProps extends PlayerData {
   large?: boolean;
   hideControls?: boolean;
 }
 
-export const usePlayer = (player: ContestantData) => {
+export const usePlayer = (player: PlayerData) => {
   const send = useSendEvent();
   const currentQuestion = useValue('currentQuestion');
   const increment = useCallback(
@@ -29,7 +29,7 @@ export const usePlayer = (player: ContestantData) => {
   };
 };
 
-export function Contestant({ large, name, handle, avatar, score, hideControls }: ContestantProps) {
+export function Player({ large, name, handle, avatar, score, hideControls }: PlayerProps) {
   const { increment, decrement } = usePlayer({ handle, avatar, name, score });
   return (
     <div className={`${classes.root} ${large ? classes.large : ''}`}>

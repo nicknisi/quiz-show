@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
-import { Contestant as ContestantData } from '../types';
-import { Contestant, ContestantProps } from './Contestant';
+import { Player as ContestantData } from '../types';
+import { Player, PlayerProps } from './Player';
 
 const contestant: ContestantData = {
   name: 'Nick Nisi',
@@ -18,5 +18,5 @@ export default {
   },
 } as Meta;
 
-export const Default: Story<ContestantProps> = (args) => <Contestant {...args} />;
-export const Large: Story<ContestantProps> = (args) => <Contestant {...args} large />;
+export const Default: Story<PlayerProps> = (args) => <Player {...args} />;
+export const Large: Story<PlayerProps> = (args) => <Player {...args} large />;

@@ -2,7 +2,7 @@ export type GameStyle = 'jsDanger' | 'goPanic';
 
 export type GameView = 'idle' | 'game' | 'contestants';
 
-export interface Contestant {
+export interface Player {
   name: string;
   handle: string;
   avatar?: string;
@@ -33,7 +33,7 @@ export interface Round {
 export interface Game {
   name: string;
   style: string;
-  contestants: Contestant[];
+  contestants: Player[];
   rounds: Round[];
 }
 
@@ -41,7 +41,7 @@ export interface State {
   name: string;
   style: string;
   currentRound: number;
-  contestants: Contestant[];
+  contestants: Player[];
   pointsAtStake: number;
   currentQuestion?: {
     category?: string;
@@ -49,5 +49,5 @@ export interface State {
   };
   rounds: Round[];
   view: 'game' | 'contestants';
-  winner?: Contestant;
+  winner?: Player;
 }

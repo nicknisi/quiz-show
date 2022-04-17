@@ -1,6 +1,6 @@
 import classes from './App.module.css';
-import { Contestant } from './components/Contestant';
-import { Contestants } from './components/Contestants';
+import { Player } from './components/Player';
+import { Players } from './components/Players';
 import { Round } from './components/Round';
 import { useAudioControls } from './hooks/audio';
 import { useGameControls, useGameData, useGameStatus, useGameView } from './hooks/game';
@@ -44,14 +44,14 @@ function App() {
           {winner ? (
             <div key="winner-view" className={classes.winner}>
               <h1>Winner</h1>
-              <Contestant hideControls {...winner} />
+              <Player hideControls {...winner} />
             </div>
           ) : view === 'contestants' ? (
-            <Contestants key="contestants-view" horizontal contestants={contestants} />
+            <Players key="contestants-view" horizontal players={contestants} />
           ) : (
             <div key="game-view" className={classes.gameWrapper}>
               <Round final={round.format !== 'standard'} round={round} />
-              <Contestants contestants={contestants} />
+              <Players players={contestants} />
             </div>
           )}
         </div>

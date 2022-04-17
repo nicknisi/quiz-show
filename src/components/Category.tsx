@@ -1,5 +1,5 @@
 import { Category as CategoryData, Question } from '../types';
-import classes from './category.module.css';
+import classes from './Category.module.css';
 
 export interface CategoryProps {
   category: CategoryData;
