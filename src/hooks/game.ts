@@ -1,7 +1,8 @@
 import { useActor, useSelector } from '@xstate/react';
 import { useCallback, useContext, useMemo } from 'react';
-import { StateValueMap } from 'xstate';
+import { StateFrom, StateValueMap } from 'xstate';
 import { GameContext } from '../GameProvider';
+import { gameMachine, GameMachineContext } from '../machines/gameMachine';
 import { Category, GameView, Question } from '../types';
 
 export const useGameService = () => {
@@ -85,3 +86,16 @@ export const useQuestion = () => {
     closeQuestion,
   };
 };
+
+export const useSendEvent = () => {
+  const service = useGameService();
+  return service.send;
+};
+
+export const useGameSelector = <T>(selector: (state: StateFrom<typeof gameMachine>) => T) => {
+  const service = useGameService();
+  return useSelector(service, selector);
+};
+
+export const useValue = <K extends keyof GameMachineContext, V extends GameMachineContext[K]>(key: K) =>
+  useGameSelector<V>((state) => state.context[key] as V);

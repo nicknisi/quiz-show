@@ -28,7 +28,7 @@ export type GameMachineEvent =
   | { type: 'TOGGLE_ANSWER' | 'TOGGLE_CONTESTANTS' | 'CLOSE_QUESTION' }
   | { type: 'SET_ROUND'; data: { round: number } }
   | { type: 'SET_WINNER'; data: { winner: Contestant } }
-  | { type: 'INCREMENT_SCORE' | 'DECREMENT_SCORE'; contestant: Contestant }
+  | { type: 'INCREMENT_SCORE' | 'DECREMENT_SCORE'; handle: string; value: number }
   | { type: 'SET_CURRENT_CONTESTANT'; data: { contestant: Contestant } };
 
 export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
@@ -77,6 +77,30 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
       game: {
         initial: 'idle',
         on: {
+          INCREMENT_SCORE: {
+            actions: assign({
+              contestants: (context, event) => {
+                const { contestants } = context;
+                const { value, handle } = event;
+                const index = contestants.findIndex((c) => c.handle === handle);
+                const player = contestants[index];
+                const newPlayer = { ...player, score: player.score + value };
+                return [...contestants.slice(0, index), newPlayer, ...contestants.slice(index + 1)];
+              },
+            }),
+          },
+          DECREMENT_SCORE: {
+            actions: assign({
+              contestants: (context, event) => {
+                const { contestants } = context;
+                const { value, handle } = event;
+                const index = contestants.findIndex((c) => c.handle === handle);
+                const player = contestants[index];
+                const newPlayer = { ...player, score: player.score - value };
+                return [...contestants.slice(0, index), newPlayer, ...contestants.slice(index + 1)];
+              },
+            }),
+          },
           SET_ROUND: {
             target: '.idle',
             actions: assign({
@@ -148,22 +172,6 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
                   },
                 }),
                 on: {
-                  INCREMENT_SCORE: {
-                    actions: assign({
-                      currentContestant: ({ currentContestant, currentQuestion }) => {
-                        currentContestant!.score += currentQuestion!.question.value;
-                        return currentContestant;
-                      },
-                    }),
-                  },
-                  DECREMENT_SCORE: {
-                    actions: assign({
-                      currentContestant: ({ currentContestant, currentQuestion }) => {
-                        currentContestant!.score -= currentQuestion!.question.value;
-                        return currentContestant;
-                      },
-                    }),
-                  },
                   TOGGLE_ANSWER: {
                     target: 'default',
                     actions: assign({
