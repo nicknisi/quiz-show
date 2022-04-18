@@ -4,7 +4,6 @@ import { StateFrom, StateValueMap } from 'xstate';
 import { GameContext } from '../GameProvider';
 import { gameMachine, GameMachineContext } from '../machines/gameMachine';
 import { Category, GameView, Question } from '../types';
-import { useEffectOnce } from './utils';
 
 export const useGameService = () => {
   const context = useContext(GameContext);
