@@ -100,7 +100,6 @@ export const useValue = <K extends keyof GameMachineContext, V extends GameMachi
 export const useGameControls = () => {
   const send = useSendEvent();
   const { setRound, contestants = [] } = useGameData();
-  console.log('CONTE', contestants);
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
       switch (event.key) {
