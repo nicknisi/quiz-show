@@ -14,8 +14,6 @@ export const useGameService = () => {
 
   const { service } = context;
 
-  (window as any).service = service;
-
   return service;
 };
 
