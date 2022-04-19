@@ -16,7 +16,7 @@ export const decorators = [
     </GameProvider>
   ),
   (Story) => (
-  <div style={{backgroundColor: '#101820'}}>
+    <div style={{backgroundColor: '#101820', margin:'3em', padding: '3em'}}>
     <Story />
   </div>
   )
