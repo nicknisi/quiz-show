@@ -1,4 +1,4 @@
-import { useActor, useSelector } from '@xstate/react';
+import { useSelector } from '@xstate/react';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { StateFrom, StateValueMap } from 'xstate';
 import { GameContext } from '../GameProvider';
@@ -17,11 +17,13 @@ export const useGameService = () => {
   return service;
 };
 
-export const useGameActor = () => {
+export const useGameSelector = <T>(selector: (state: StateFrom<typeof gameMachine>) => T) => {
   const service = useGameService();
-  const actor = useActor(service);
-  return actor;
+  return useSelector(service, selector);
 };
+
+export const useContextValue = <T extends keyof GameMachineContext>(key: T) =>
+  useGameSelector(({ context }) => context[key]);
 
 export const useGameStatus = () => {
   const service = useGameService();
@@ -30,17 +32,24 @@ export const useGameStatus = () => {
 };
 
 export const useGameData = () => {
-  const [state, send] = useGameActor();
-  const { contestants, currentContestant, currentQuestion, currentRound, name, rounds, style, winner } = state.context;
+  const service = useGameService();
+  const contestants = useContextValue('contestants');
+  const currentContestant = useContextValue('currentContestant');
+  const currentQuestion = useContextValue('currentQuestion');
+  const currentRound = useContextValue('currentRound');
+  const name = useContextValue('name');
+  const rounds = useContextValue('rounds');
+  const style = useContextValue('style');
+  const winner = useContextValue('winner');
   const round = useMemo(() => rounds?.[currentRound], [rounds, currentRound]);
   const numRounds = useMemo(() => rounds?.length, [rounds]);
   const setRound = useCallback(
     (round: 1 | -1 = 1) => {
       const nextRound =
         (currentRound + round) % numRounds === 0 ? 0 : currentRound + round < 0 ? numRounds - 1 : currentRound + round;
-      send({ type: 'SET_ROUND', data: { round: nextRound } });
+      service.send({ type: 'SET_ROUND', data: { round: nextRound } });
     },
-    [numRounds, currentRound],
+    [numRounds, currentRound, service],
   );
   return {
     contestants,
@@ -84,11 +93,6 @@ export const useQuestion = () => {
 export const useSendEvent = () => {
   const service = useGameService();
   return service.send;
-};
-
-export const useGameSelector = <T>(selector: (state: StateFrom<typeof gameMachine>) => T) => {
-  const service = useGameService();
-  return useSelector(service, selector);
 };
 
 export const useValue = <K extends keyof GameMachineContext, V extends GameMachineContext[K]>(key: K) =>
