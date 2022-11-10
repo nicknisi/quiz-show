@@ -1,5 +1,6 @@
 import { assign, createMachine } from 'xstate';
-import { Category, Player, Game, GameStyle, Question, Round } from '../types';
+import { play, stop } from '../audio';
+import { Category, Game, GameStyle, Player, Question, Round } from '../types';
 
 export interface GameMachineContext {
   name: string;
@@ -17,6 +18,17 @@ export interface GameMachineContext {
   url: string;
 }
 
+export type GameAudioEvent =
+  | 'CORRECT_ANSWER'
+  | 'INCORRECT_ANSWER'
+  | 'CORRECT_STEAL'
+  | 'INCORRECT_STEAL'
+  | 'TIME_UP'
+  | 'THEME'
+  | 'STOP_AUDIO'
+  | 'STRESS'
+  | 'WINNER';
+
 export type GameMachineEvent =
   | {
       type: 'SELECT_QUESTION';
@@ -29,13 +41,19 @@ export type GameMachineEvent =
   | { type: 'SET_ROUND'; data: { round: number } }
   | { type: 'SET_WINNER'; winner: Player | undefined }
   | { type: 'INCREMENT_SCORE' | 'DECREMENT_SCORE'; handle: string; value: number }
-  | { type: 'SET_CURRENT_CONTESTANT'; data: { contestant: Player } };
+  | { type: 'SET_CURRENT_CONTESTANT'; data: { contestant: Player } }
+  | { type: GameAudioEvent };
 
 export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
   {
     id: 'gameMachine',
     preserveActionOrder: true,
     initial: 'initial',
+    on: {
+      STOP_AUDIO: { actions: 'stopAudio' },
+      THEME: { actions: 'playAudio' },
+      STRESS: { actions: 'playAudio' },
+    },
     states: {
       initial: {
         always: 'load',
@@ -148,6 +166,11 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
             states: {
               default: {
                 on: {
+                  CORRECT_ANSWER: { actions: 'playAudio' },
+                  INCORRECT_ANSWER: { actions: 'playAudio' },
+                  CORRECT_STEAL: { actions: 'playAudio' },
+                  INCORRECT_STEAL: { actions: 'playAudio' },
+                  TIME_UP: { actions: 'playAudio' },
                   SET_CURRENT_CONTESTANT: {
                     actions: assign({
                       currentContestant: (_context, { data: { contestant } }) => contestant,
@@ -210,6 +233,37 @@ export const gameMachine = createMachine<GameMachineContext, GameMachineEvent>(
           const game: Game = (await response.json()).game;
           return game;
         },
+    },
+    actions: {
+      playAudio: ({ style }, { type }) => {
+        switch (type) {
+          case 'THEME':
+            play(`${style}Theme`);
+            break;
+          case 'CORRECT_ANSWER':
+            play('correctAnswer');
+            break;
+          case 'INCORRECT_ANSWER':
+            play('wrongAnswer');
+            break;
+          case 'CORRECT_STEAL':
+            play('correctSteal');
+            break;
+          case 'INCORRECT_STEAL':
+            play('wrongSteal');
+            break;
+          case 'WINNER':
+            play(`${style}Winner`);
+            break;
+          case 'TIME_UP':
+            play('timesUp');
+            break;
+          case 'STRESS':
+            play('jsDangerStressTheme');
+            break;
+        }
+      },
+      stopAudio: () => stop(),
     },
   },
 );

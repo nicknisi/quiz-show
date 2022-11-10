@@ -6,3 +6,9 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     background-color: #101820;
 }
+
+#app {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
