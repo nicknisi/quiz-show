@@ -11,7 +11,7 @@ theme: Work, 3
 
 ## [fit] Nick Nisi
 
-- Staff Engineer at C2FO
+- Staff Engineer
 - Organizer and Emcee of NEJS Conf (2015-2019)
 - Emcee of TypeScript Conf US
 - Panelist on JS Party
